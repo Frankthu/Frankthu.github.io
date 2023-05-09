@@ -1,34 +1,39 @@
+const idiomForm = document.getElementById('idiom-form');
 const idiomInput = document.getElementById('idiom-input');
-const extractButton = document.getElementById('extract-button');
-const idiomOutput = document.getElementById('idiom-output');
+const idiomResult = document.getElementById('idiom-result');
 
-extractButton.addEventListener('click', () => {
-  const idiom = encodeURIComponent(idiomInput.value.trim().toLowerCase());
-  
-  if (idiom === '') {
-    idiomOutput.innerHTML = '请输入一个成语';
-    return;
+idiomForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const word = idiomInput.value.trim();
+  if (word) {
+    idiomResult.innerHTML = '<p>正在查询成语信息，请稍候...</p>';
+    fetch(`/api/idiom?word=${encodeURIComponent(word)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          idiomResult.innerHTML = `<p>${data.error}</p>`;
+        } else {
+          fetch(`/api/translate?word=${encodeURIComponent(word)}`)
+            .then(response => response.json())
+            .then(data2 => {
+              const translation = data2.translation || '无法翻译';
+              const resultHtml = `
+                <h2>${data.word}（${data.derivation}）</h2>
+                <p>${data.explanation}</p>
+                <p>例：${data.example}</p>
+                <p>英译：${translation}</p>
+              `;
+              idiomResult.innerHTML = resultHtml;
+            })
+            .catch(error => {
+              console.error(error);
+              idiomResult.innerHTML = '<p>获取数据时发生错误</p>';
+            });
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        idiomResult.innerHTML = '<p>获取数据时发生错误</p>';
+      });
   }
-  
-  fetch('idiom.json')
-    .then(response => response.json())
-    .then(data => {
-      const result = data.find(item => item.word.toLowerCase() === decodeURIComponent(idiom));
-      
-      if (result) {
-        const html = `
-          <p><strong>成语:</strong> ${result.word}</p>
-          <p><strong>出处:</strong> ${result.derivation}</p>
-          <p><strong>例子:</strong> ${result.example}</p>
-          <p><strong>解释:</strong> ${result.explanation}</p>
-        `;
-        idiomOutput.innerHTML = html;
-      } else {
-        idiomOutput.innerHTML = '未找到该成语';
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      idiomOutput.innerHTML = '获取数据时发生错误';
-    });
 });

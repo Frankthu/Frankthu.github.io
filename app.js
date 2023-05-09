@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-const idioms = require('./idiom.json');
-
+const md5 = require('md5');
 const app = express();
 app.use(cors());
+
+const APP_ID = '20200211000382774';
+const SECRET_KEY = 'b1imCNk_EdXIHM0zX2bD';
 
 app.get('/api/idiom', (req, res) => {
   const word = req.query.word;
@@ -24,12 +26,15 @@ app.get('/api/idiom', (req, res) => {
 
 app.get('/api/translate', (req, res) => {
   const word = req.query.word;
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl=en&dt=t&q=${word}`;
-  fetch(url)
+  const url = `http://api.fanyi.baidu.com/api/trans/vip/translate`;
+  const salt = Date.now();
+  const sign = md5(APP_ID + word + salt + SECRET_KEY);
+  const params = `?q=${encodeURIComponent(word)}&from=zh&to=en&appid=${APP_ID}&salt=${salt}&sign=${sign}`;
+  fetch(url + params)
     .then(response => response.json())
     .then(data => {
-      if (data[0] && data[0][0]) {
-        const translation = data[0][0][0];
+      if (data && data.trans_result && data.trans_result.length > 0) {
+        const translation = data.trans_result[0].dst;
         res.json({ translation });
       } else {
         res.json({ error: '无法翻译成语' });
