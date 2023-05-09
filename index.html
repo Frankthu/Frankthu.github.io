@@ -1,23 +1,18 @@
-<meta charset="UTF-8">
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Four Word Exercise</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <header>
-      <h1>Four Word Exercise</h1>
-    </header>
-    <main>
-      <div class="idiom-extraction">
-        <h2>成语提取</h2>
-        <input type="text" id="idiom-input" placeholder="请输入一个成语">
-        <button id="extract-button">提取</button>
-        <div id="idiom-output"></div>
-      </div>
-    </main>
-    <script src="script.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>成语翻译</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>成语翻译</h1>
+  <form id="idiom-form">
+    <label for="word-input">请输入一个中文成语：</label>
+    <input type="text" id="word-input" name="word-input" required>
+    <button type="submit">查询</button>
+  </form>
+  <div id="idiom-result"></div>
+  <script src="script.js"></script>
+</body>
 </html>
