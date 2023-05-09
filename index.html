@@ -1,26 +1,23 @@
+<meta charset="UTF-8">
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四词训练 - 英语学习网站</title>
+    <title>Four Word Exercise</title>
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>四词训练 - 英语学习网站</h1>
-        <button id="fetchWord">获取词语</button>
-        <div class="word-display">
-            <h2 id="word"></h2>
-            <p id="derivation"></p>
-            <p id="example"></p>
-            <p id="explanation"></p>
-        </div>
-        <div class="translation-display">
-            <h3>英文翻译：</h3>
-            <p id="translation"></p>
-        </div>
-    </div>
+  </head>
+  <body>
+    <header>
+      <h1>Four Word Exercise</h1>
+    </header>
+    <main>
+      <div class="idiom-extraction">
+        <h2>成语提取</h2>
+        <input type="text" id="idiom-input" placeholder="请输入一个成语">
+        <button id="extract-button">提取</button>
+        <div id="idiom-output"></div>
+      </div>
+    </main>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
